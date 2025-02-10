@@ -1,0 +1,10 @@
+schemaVersion: 1.0
+steps:
+  - task: powershell
+    description: "Install required software for Mobility Persona"
+    script: |
+      choco install -y visualstudio2019community
+      choco install -y android-sdk
+      choco install -y docker-desktop
+      choco install -y git
+      choco install -y vscode
