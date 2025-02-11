@@ -1,0 +1,65 @@
+schemaVersion: 1.0
+steps:
+  - task: powershell
+    description: "Install applications via Chocolatey"
+    script: |
+      # Set execution policy
+      Set-ExecutionPolicy Bypass -Scope Process -Force
+
+      # Install Chocolatey if not already installed
+      if (-not (Get-Command choco.exe -ErrorAction SilentlyContinue)) {
+        Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+      }
+
+      # Install applications via Chocolatey
+      choco install -y vscode git
+
+  - task: powershell
+    description: "Download and install applications from Azure Blob Storage"
+    script: |
+      # Authenticate using Managed Identity
+      Connect-AzAccount -Identity
+
+      # Define variables
+      $storageAccountName = "stappinstallrepo"
+      $containerName = "software"
+      $downloadPath = "C:\Temp"
+
+      # Ensure Temp Directory Exists
+      if (-not (Test-Path -Path $downloadPath)) {
+        New-Item -ItemType Directory -Path $downloadPath
+      }
+
+      # Define software list
+      $softwareList = @(
+        @{ Name = "SQL Server Management Studio (SSMS)"; BlobName = "ssms-setup.exe"; InstallArgs = "/Quiet /Norestart" }
+        @{ Name = "PyCharm Professional"; BlobName = "pycharm-professional.exe"; InstallArgs = "/S" }
+      )
+
+      # Get Storage Context
+      $storageContext = New-AzStorageContext -StorageAccountName $storageAccountName -UseConnectedAccount
+
+      # Download and install software
+      foreach ($software in $softwareList) {
+        $blobName = $software.BlobName
+        $installerPath = Join-Path $downloadPath $blobName
+        $installArgs = $software.InstallArgs
+
+        Write-Host "⬇ Downloading $($software.Name)..."
+
+        # Download the installer
+        Get-AzStorageBlobContent -Container $containerName -Blob $blobName -Destination $installerPath -Context $storageContext
+
+        # Verify download
+        if (Test-Path -Path $installerPath) {
+          Write-Host "✅ $($software.Name) downloaded successfully: $installerPath"
+
+          # Install the software silently
+          Write-Host "⚙ Installing $($software.Name)..."
+          Start-Process -FilePath $installerPath -ArgumentList $installArgs -Wait  # Ensures silent install
+
+          Write-Host "✅ $($software.Name) installation completed!"
+        } else {
+          Write-Host "❌ Download failed for $($software.Name)!"
+        }
+      }
