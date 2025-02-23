@@ -8,5 +8,5 @@
             "description": "Installs common software from Azure Storage",
             "path": "Tasks/Install-Software/install-software.yaml"
         }
-    ]c
+    ]
 }
