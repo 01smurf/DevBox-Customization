@@ -1,12 +1,13 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "customizations": [
-        {
-            "id": "Install-Software",
-            "name": "Install Software",
-            "description": "Installs common software from Azure Storage",
-            "path": "Tasks/Install-Software/install-software.yaml"
-        }
-    ]
+  "$schema": "https://aka.ms/devcenter/catalog.schema.json",
+  "name": "DevBox Customization Catalog",
+  "description": "Catalog for Dev Box customizations",
+  "items": [
+    {
+      "id": "install-software",
+      "name": "Install Software",
+      "description": "Downloads and installs software from Azure Storage Blob.",
+      "path": "Tasks/Install-Software/install-software.yaml"
+    }
+  ]
 }
