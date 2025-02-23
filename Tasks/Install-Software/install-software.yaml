@@ -1,0 +1,18 @@
+schemaVersion: 1.0
+name: Install-Software
+description: "Downloads and installs software from Azure Storage Blob."
+runner: powershell
+command: ./install-software.ps1
+inputs:
+  - id: StorageAccountName
+    type: string
+    required: true
+    description: "The name of the Azure Storage Account containing software installers."
+  - id: ContainerName
+    type: string
+    required: true
+    description: "The Azure Storage Container where the software installers are stored."
+  - id: DownloadPath
+    type: string
+    default: "C:\\Temp"
+    description: "Local path where software installers will be downloaded."

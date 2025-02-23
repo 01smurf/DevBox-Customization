@@ -1,0 +1,12 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "customizations": [
+        {
+            "id": "Install-Software",
+            "name": "Install Software",
+            "description": "Installs common software from Azure Storage",
+            "path": "Tasks/Install-Software/install-software.yaml"
+        }
+    ]c
+}
