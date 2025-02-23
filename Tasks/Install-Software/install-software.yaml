@@ -6,9 +6,9 @@ command: ./install-software.ps1
 inputs:
   - id: StorageAccountName
     type: string
-    default: "stoappinstall"  # Change to your storage account name
+    default: "stoappinstall"
     description: "The name of the Azure Storage Account containing software installers."
   - id: ContainerName
     type: string
-    default: "advanceanalytics"  # Change to your container name
+    default: "advanceanalytics"
     description: "The Azure Storage Container where the software installers are stored."
